@@ -1,6 +1,7 @@
 package two_fer
 
+import "core:fmt"
+
 two_fer :: proc(name: string = "") -> string {
-	// Implement this procedure.
-	return ""
+	return fmt.tprintf("One for %s, one for me.", "you" if name == "" else name)
 }
