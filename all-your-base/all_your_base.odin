@@ -1,7 +1,5 @@
 package all_your_base
 
-import "core:slice"
-
 Error :: enum {
 	None,
 	Invalid_Input_Digit,
@@ -23,23 +21,7 @@ rebase :: proc(input_base: int, digits: []int, output_base: int) -> ([]int, Erro
 		return []int{}, error
 	}
 
-	positional_notation := to_positional_notation(number, output_base)
-	return positional_notation, .None
-}
-
-power :: proc(base, exp: int) -> int {
-	result := 1
-	b := base
-	e := exp
-	for e > 0 {
-		if e % 2 == 1 {
-			result *= b
-		}
-		b *= b
-		e /= 2
-	}
-
-	return result
+	return to_positional_notation(number, output_base), .None
 }
 
 to_number :: proc(digits: []int, input_base: int) -> (int, Error) {
@@ -48,8 +30,7 @@ to_number :: proc(digits: []int, input_base: int) -> (int, Error) {
 		if digit < 0 || digit >= input_base {
 			return number, .Invalid_Input_Digit
 		}
-		exp := len(digits) - 1 - i
-		number += digit * power(input_base, exp)
+		number = number * input_base + digit
 	}
 
 	return number, .None
@@ -58,13 +39,13 @@ to_number :: proc(digits: []int, input_base: int) -> (int, Error) {
 to_positional_notation :: proc(number, output_base: int) -> []int {
 	positional_notation := make([dynamic]int)
 	n := number
+	if n == 0 {
+		append(&positional_notation, 0)
+		return positional_notation[:]
+	}
 	for n > 0 {
-		append(&positional_notation, n % output_base)
+		inject_at_elem(&positional_notation, 0, n % output_base)
 		n /= output_base
 	}
-	if len(positional_notation[:]) == 0 {
-		append(&positional_notation, 0)
-	}
-	slice.reverse(positional_notation[:])
 	return positional_notation[:]
 }
