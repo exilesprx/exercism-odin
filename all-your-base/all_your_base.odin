@@ -37,15 +37,15 @@ to_number :: proc(digits: []int, input_base: int) -> (int, Error) {
 }
 
 to_positional_notation :: proc(number, output_base: int) -> []int {
-	positional_notation := make([dynamic]int)
+	digits := make([dynamic]int)
 	n := number
 	if n == 0 {
-		append(&positional_notation, 0)
-		return positional_notation[:]
+		append(&digits, 0)
+		return digits[:]
 	}
 	for n > 0 {
-		inject_at_elem(&positional_notation, 0, n % output_base)
+		inject_at_elem(&digits, 0, n % output_base)
 		n /= output_base
 	}
-	return positional_notation[:]
+	return digits[:]
 }
