@@ -4,8 +4,8 @@ is_armstrong_number :: proc(n: u128) -> bool {
 	e := exp(n)
 	sum := u128(0)
 	num := n
-	for i in 1 ..= e {
-		divisor := power(10, e - i)
+	for i in 0 ..< e {
+		divisor := power(10, e - i - 1)
 		rem := num % divisor
 		num /= divisor
 		if i == e {
@@ -29,6 +29,10 @@ exp :: proc(n: u128) -> int {
 }
 
 power :: proc(n: u128, exp: int) -> u128 {
+	if exp <= 0 {
+		return 1
+	}
+
 	sum := n
 	for i := 2; i <= exp; i += 1 {
 		sum *= n
